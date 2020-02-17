@@ -3,7 +3,7 @@
 Plugin Name: WP-WhatShortCode
 Plugin URI: https://github.com/mkaboldy/wp-whatshortcode
 Description: Adds a shortcode column to page/post admin
-Version: 1.0.0
+Version: 1.1.0
 Author: Miklos Kaboldy
 Author URI: https://github.com/mkaboldy
 
