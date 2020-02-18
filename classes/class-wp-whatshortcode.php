@@ -28,21 +28,55 @@ if ( ! class_exists( 'WP_WhatShortCode' ) ) {
 		private static $column_id = 'shortcode';
 
 		/**
-		 * Configure hooks.
+		 * Configure hooks
 		 *
 		 * @return void
 		 */
 		public static function init() {
 
+			// add the shortcode columns for any post that features post body.
 			foreach ( $GLOBALS['_wp_post_type_features'] as $post_type => $features ) {
 
 				if ( isset( $features['editor'] ) ) {
 
-					add_filter( "manage_{$post_type}_posts_columns", array( __NAMESPACE__ . '\WP_WhatShortCode', 'manage_posts_columns' ) );
-					add_action( "manage_{$post_type}_posts_custom_column", array( __NAMESPACE__ . '\WP_WhatShortCode', 'manage_posts_custom_column' ), 10, 2 );
+					add_filter( "manage_{$post_type}_posts_columns", array( __CLASS__, 'manage_posts_columns' ) );
+					add_action( "manage_{$post_type}_posts_custom_column", array( __CLASS__, 'manage_posts_custom_column' ), 10, 2 );
 
 				}
 			}
+
+			// add options page.
+			add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
+		}
+
+		/**
+		 * Inserts the options page
+		 *
+		 * @return void
+		 */
+		public static function admin_menu() {
+			add_submenu_page( 'options-general.php', 'What shortcode?', 'What shortcode info', 'administrator', 'what-shortcode', array( __CLASS__, 'info' ) );
+		}
+
+		/**
+		 * Outputs shortcode info
+		 *
+		 * @return void
+		 */
+		public static function info() {
+
+			global $shortcode_tags;
+
+			printf( '<h1>%1s</h1>', esc_html( __( 'What shortcode?' ) ) );
+			printf( '<h2>%1s</h2>', esc_html( __( 'Available shortcodes' ) ) );
+			printf( '<table>' );
+			printf( '<tr><th>%1s</th><th>%2s</th></tr>', esc_html( __( 'Tag' ) ), esc_html( __( 'Callable name' ) ) );
+			foreach ( $shortcode_tags as $tag => $code ) {
+				is_callable( $code, false, $callable_name );
+				printf( '<tr><td>%1s</td><td><pre>%2s</pre></td><tr>', esc_html( $tag ), esc_html( $callable_name ) );
+			}
+
+			printf( '</table>' );
 		}
 
 		/**

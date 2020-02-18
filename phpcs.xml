@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="RA">
-  <description>RA Coding Standards</description>
+<ruleset name="WP">
+  <description>WordPress coding standards</description>
 
   <!-- Scan these files -->
   <file>*.php</file>
@@ -13,5 +13,8 @@
   <!-- Show sniff codes in all reports -->
   <arg value="s"/>
 
-  <rule ref="WordPress"/>>
+  
+  <rule ref="WordPress"/>
+  <rule ref="WordPress-Extra"/>
+  <rule ref="WordPress-Docs"/>
 </ruleset>
